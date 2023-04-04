@@ -8,20 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var couresList = [Course]()
-    @State private var tabBarHidden: Bool = false
+    @State var generalCourses: [Course] = []
+    @State var generalStudiesCourses: [Course] = []
     @State var selectedCourses: [Course] = []
+    @State var favoriteCourses: [Course] = []
 
     var body: some View {
         TabView {
-            GeneralCourseView(courseList: $couresList, selectedCourses: $selectedCourses)
+            GeneralCourseView(courseList: $generalCourses, selectedCourses: $selectedCourses, favoriteCourses: $favoriteCourses)
                 .tabItem {
                     Label("普通課程", systemImage: "tag")
                 }
-            GeneralStudiesView(courseList: $couresList)
+                
+            GeneralStudiesView(courseList: $generalStudiesCourses, selectedCourses: $selectedCourses)
                 .tabItem {
                     Label("通識課程", systemImage: "person.circle")
                 }
+            
             FavoritesView(selectedCourses: $selectedCourses)
                 .tabItem {
                     Label("收藏夾", systemImage: "folder")
@@ -46,7 +49,13 @@ struct ContentView: View {
                 let decodedData = try JSONDecoder().decode([Course].self, from: data)
 
                 DispatchQueue.main.async {
-                    self.couresList = decodedData
+                    for course in decodedData {
+                        if course.department == "通識" {
+                            self.generalStudiesCourses.append(course)
+                        } else {
+                            self.generalCourses.append(course)
+                        }
+                    }
                 }
             } catch {
                 print("Error decoding JSON: \(error)")
@@ -54,8 +63,6 @@ struct ContentView: View {
         }.resume()
     }
 }
-
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

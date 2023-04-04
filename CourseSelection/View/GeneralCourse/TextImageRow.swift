@@ -10,6 +10,7 @@ import SwiftUI
 struct TextImageRow: View {
     @State var course: Course
     var isSelected: Bool
+    var isFavorite: Bool
     
     var body: some View {
         HStack(alignment: .center, spacing: 15) {
@@ -29,15 +30,21 @@ struct TextImageRow: View {
                 CourseTags(course: course)
             }
             
-            
-            if isSelected { // 在此添加條件標記
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundColor(.green)
-                        }
+            VStack {
+                if isSelected { // 在此添加條件標記
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.green)
+                }
+                if isFavorite { // 在此添加條件標記
+                    Image(systemName: "star.circle.fill")
+                        .foregroundColor(.yellow)
+                }
+            }
         }
         .frame(width: .infinity, height: 105)
     }
 }
+
 
 
 struct CourseImage: View {
@@ -95,6 +102,6 @@ struct TagText: View {
 
 struct TextImageRow_Previews: PreviewProvider {
     static var previews: some View {
-        TextImageRow(course: Course(id: "B0001", name: "通識測試2", shortName: "通識測試1", department: "通識", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [501, 502, 201], place: "", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),isSelected: true)
+        TextImageRow(course: Course(id: "B0001", name: "通識測試2", shortName: "通識測試1", department: "通識", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [501, 502, 201], place: "", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),isSelected: true, isFavorite: true)
     }
 }

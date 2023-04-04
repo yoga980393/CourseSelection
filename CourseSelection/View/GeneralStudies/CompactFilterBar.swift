@@ -15,8 +15,8 @@ struct CompactFilterBar: View {
         HStack {
             Picker(selection: $filter.dayOfWeek, label: Text("Day of Week")) {
                 Text("星期").tag(Int?.none)
-                ForEach(1...7, id: \.self) { day in
-                    Text("星期\(day)").tag(Int?(day))
+                ForEach(1...5, id: \.self) { day in
+                    Text("星期\(weekToString(week: day))").tag(Int?(day))
                 }
             }.pickerStyle(.menu)
 

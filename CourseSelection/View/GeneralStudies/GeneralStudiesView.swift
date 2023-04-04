@@ -9,10 +9,13 @@ import SwiftUI
 
 struct GeneralStudiesView: View {
     @Binding var courseList: [Course]
+    @Binding var selectedCourses: [Course]
     @State private var chosenVolunteers: [Int] = [-1]
     @State private var currentlySelectedVolunteerIndex: Int?
     @State private var showGeneralStudiesList = false
     @State private var showAlertForDelete = false
+    @State private var showAlertForConflict = false
+    @State private var conflictCourse: Course?
 
     var body: some View {
         ScrollView {
@@ -33,18 +36,24 @@ struct GeneralStudiesView: View {
             .padding()
         }
         .sheet(isPresented: $showGeneralStudiesList) {
-            GeneralStudiesList(CouresList: $courseList, selectedCourseIndex: Binding(
+            GeneralStudiesList(courseList: $courseList, selectedCourseIndex: Binding(
                 get: { currentlySelectedVolunteerIndex != nil ? chosenVolunteers[currentlySelectedVolunteerIndex!] : -1 },
                 set: { newIndex in
                     if let currentIndex = currentlySelectedVolunteerIndex {
-                        chosenVolunteers[currentIndex] = newIndex
-                        if currentIndex == chosenVolunteers.count - 1 && chosenVolunteers.count < 10 {
-                            chosenVolunteers.append(-1)
+                        let selectedCourse = courseList[newIndex]
+                        if let existingCourse = selectedCourses.first(where: { $0.conflicts(with: selectedCourse) }) {
+                            conflictCourse = existingCourse
+                            showAlertForConflict = true
+                        } else {
+                            chosenVolunteers[currentIndex] = newIndex
+                            if currentIndex == chosenVolunteers.count - 1 && chosenVolunteers.count < 10 {
+                                chosenVolunteers.append(-1)
+                            }
                         }
                     }
                     currentlySelectedVolunteerIndex = nil
                 }
-            ), chosenVolunteers: chosenVolunteers) // Pass the chosenVolunteers array
+            ), selectedCourses: $selectedCourses, chosenVolunteers: chosenVolunteers) // Pass the chosenVolunteers array
         }
         .alert(isPresented: $showAlertForDelete) {
             Alert(title: Text("確認刪除"),
@@ -53,6 +62,11 @@ struct GeneralStudiesView: View {
                       deleteVolunteer(at: currentlySelectedVolunteerIndex!)
                   },
                   secondaryButton: .cancel(Text("取消")))
+        }
+        .alert(isPresented: $showAlertForConflict) {
+            Alert(title: Text("衝突警告"),
+                  message: Text("選擇的課程與 \(conflictCourse?.name ?? "") 有時間衝突。"),
+                  dismissButton: .default(Text("確定")))
         }
     }
     
@@ -71,6 +85,6 @@ struct GeneralStudiesView_Previews: PreviewProvider {
             Course(id: "B0001", name: "通識測試1", shortName: "通識測試1", department: "必修", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [303, 304], place: "", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
             Course(id: "B0002", name: "通識測試2", shortName: "通識測試2", department: "通識", introduction: "", language: "國語", type: "藝術", credits: 2, hour: 2, schedule: [501, 502, 503], place: "", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
             Course(id: "B0003", name: "通識測試3", shortName: "通識測試2", department: "通識", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [501, 502, 201], place: "", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0")
-        ]))
+        ]),selectedCourses: Binding.constant([]))
     }
 }

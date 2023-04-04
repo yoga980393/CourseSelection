@@ -29,7 +29,7 @@ struct VolunteerView: View {
                         .foregroundColor(.gray)
                 }
             }else{
-                TextImageRow(course: CouresList[choose], isSelected: false)
+                TextImageRow(course: CouresList[choose], isSelected: false, isFavorite: false)
             }
         }
         .id(choose)
