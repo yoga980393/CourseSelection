@@ -151,16 +151,18 @@ struct FavoriteCoursesList: View {
     @Binding var favoriteCourses: [Course]
     @Binding var selectedCourses: [Course]
     @Environment(\.presentationMode) var presentationMode
-    @State private var showingAlert = false
-    @State private var selectedCourse: Course?
-    
+    @State private var showAlert = false
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
+    @State private var alertPrimaryButton: Alert.Button = .default(Text(""))
+    @State private var secondaryButtonSwitch = false
+
     var body: some View {
         NavigationView {
             List {
                 ForEach(favoriteCourses) { course in
                     Button(action: {
-                        selectedCourse = course
-                        showingAlert = true
+                        addToSelectedCourses(course: course)
                     }) {
                         TextImageRow(course: course, isSelected: false, isFavorite: false)
                     }
@@ -170,31 +172,77 @@ struct FavoriteCoursesList: View {
             .navigationBarItems(trailing: Button("關閉") {
                 dismiss()
             })
-            .alert(isPresented: $showingAlert) {
-                Alert(
-                    title: Text("加選確認"),
-                    message: Text("是否加選\(selectedCourse?.name ?? "")?"),
-                    primaryButton: .default(Text("確認"), action: {
-                        addToSelectedCourses(course: selectedCourse!)
-                    }),
-                    secondaryButton: .cancel(Text("取消"))
-                )
-            }
+        }
+        .alert(isPresented: $showAlert) {
+            secondaryButtonCtrl()
         }
     }
-    
+
     private func dismiss() {
         presentationMode.wrappedValue.dismiss()
     }
-    
+
     private func addToSelectedCourses(course: Course) {
         if let index = favoriteCourses.firstIndex(of: course) {
-            favoriteCourses.remove(at: index)
-            selectedCourses.append(course)
-            dismiss()
+            if hasTimeConflict(course: course, selectedCourses: selectedCourses) {
+                if let conflictingCourse = getConflictingCourse(course: course, selectedCourses: selectedCourses) {
+                    showAlert = true
+                    alertTitle = "衝堂提醒"
+                    alertMessage = "課程「\(course.name)」與已選課程「\(conflictingCourse.name)」衝堂。"
+                    alertPrimaryButton = .default(Text("確認"))
+                    secondaryButtonSwitch = false
+                }
+            } else {
+                showAlert = true
+                alertTitle = "加選確認"
+                alertMessage = "是否加選\(course.name)?"
+                secondaryButtonSwitch = true
+                alertPrimaryButton = .default(Text("確認"), action: {
+                    favoriteCourses.remove(at: index)
+                    selectedCourses.append(course)
+                    dismiss()
+                })
+            }
+        }
+    }
+
+    private func hasTimeConflict(course: Course, selectedCourses: [Course]) -> Bool {
+        for selectedCourse in selectedCourses {
+            if !Set(course.schedule).isDisjoint(with: Set(selectedCourse.schedule)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    private func getConflictingCourse(course: Course, selectedCourses: [Course]) -> Course? {
+        for selectedCourse in selectedCourses {
+            if !Set(course.schedule).isDisjoint(with: Set(selectedCourse.schedule)) {
+                return selectedCourse
+            }
+        }
+        return nil
+    }
+    
+    private func secondaryButtonCtrl() -> Alert{
+        if(secondaryButtonSwitch){
+            return Alert(
+                title: Text(alertTitle),
+                message: Text(alertMessage),
+                primaryButton: alertPrimaryButton,
+                secondaryButton: .cancel(Text("取消"))
+            )
+        }
+        else{
+            return Alert(
+                title: Text(alertTitle),
+                message: Text(alertMessage),
+                dismissButton: alertPrimaryButton
+            )
         }
     }
 }
+
 
 
 

@@ -41,7 +41,7 @@ struct TextImageRow: View {
                 }
             }
         }
-        .frame(width: .infinity, height: 105)
+        .frame(height: 105)
     }
 }
 
