@@ -8,6 +8,9 @@ import SwiftUI
 
 struct FavoritesView: View {
     @Binding var selectedCourses: [Course]
+    @Binding var favoriteCourses: [Course]
+    @State private var showingFavoriteCoursesSheet = false
+    
     let rowHeight: CGFloat = 80
     private let courseColors: [Color] = [
         Color(red: 255/255, green: 227/255, blue: 227/255),
@@ -20,14 +23,22 @@ struct FavoritesView: View {
     ]
     
     var body: some View {
-        ScrollView{
+        GeometryReader { geometry in
             ZStack {
-                Color.white
-                
-                Background()
-                    .frame(height: 1200)
-                
-                courseBlocks
+                ScrollView {
+                    ZStack {
+                        Color.white
+                        
+                        Background()
+                            .frame(height: 1200)
+                        
+                        courseBlocks
+                    }
+                }
+                favoriteCoursesButton(geometry: geometry) // 传递 geometry 参数
+            }
+            .sheet(isPresented: $showingFavoriteCoursesSheet) {
+                FavoriteCoursesList(favoriteCourses: $favoriteCourses, selectedCourses: $selectedCourses)
             }
         }
     }
@@ -106,13 +117,93 @@ struct FavoritesView: View {
         }
         .position(x: ((UIScreen.main.bounds.width * 0.9) / 6) * CGFloat(day + 1) + ((UIScreen.main.bounds.width * 0.9) / 7.17), y: 25 + rowHeight * CGFloat(classIndex) + (blockHeight / 2) + padding)
     }
+    
+    private func favoriteCoursesButton(geometry: GeometryProxy) -> some View {
+        VStack {
+            Spacer()
+            HStack {
+                Spacer()
+                Button(action: {
+                    // 按钮点击事件
+                    showFavoriteCourses()
+                }) {
+                    Image(systemName: "list.bullet")
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .clipShape(Circle())
+                        .shadow(radius: 5)
+                }
+                .padding(.trailing, geometry.size.width * 0.05) // 从屏幕右侧留出一定空间
+                .padding(.bottom, geometry.safeAreaInsets.bottom) // 从屏幕底部留出一定空间
+            }
+        }
+    }
+    
+    private func showFavoriteCourses() {
+        showingFavoriteCoursesSheet = true
+    }
 }
+
+struct FavoriteCoursesList: View {
+    @Binding var favoriteCourses: [Course]
+    @Binding var selectedCourses: [Course]
+    @Environment(\.presentationMode) var presentationMode
+    @State private var showingAlert = false
+    @State private var selectedCourse: Course?
+    
+    var body: some View {
+        NavigationView {
+            List {
+                ForEach(favoriteCourses) { course in
+                    Button(action: {
+                        selectedCourse = course
+                        showingAlert = true
+                    }) {
+                        TextImageRow(course: course, isSelected: false, isFavorite: false)
+                    }
+                }
+            }
+            .navigationTitle("收藏課程")
+            .navigationBarItems(trailing: Button("關閉") {
+                dismiss()
+            })
+            .alert(isPresented: $showingAlert) {
+                Alert(
+                    title: Text("加選確認"),
+                    message: Text("是否加選\(selectedCourse?.name ?? "")?"),
+                    primaryButton: .default(Text("確認"), action: {
+                        addToSelectedCourses(course: selectedCourse!)
+                    }),
+                    secondaryButton: .cancel(Text("取消"))
+                )
+            }
+        }
+    }
+    
+    private func dismiss() {
+        presentationMode.wrappedValue.dismiss()
+    }
+    
+    private func addToSelectedCourses(course: Course) {
+        if let index = favoriteCourses.firstIndex(of: course) {
+            favoriteCourses.remove(at: index)
+            selectedCourses.append(course)
+            dismiss()
+        }
+    }
+}
+
+
+
 struct FavoritesView_Previews: PreviewProvider {
     static var previews: some View {
         FavoritesView(selectedCourses: .constant([
             Course(id: "B0001", name: "通識測試1", shortName: "通識測試1", department: "必修", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [303, 304], place: "E101", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
             Course(id: "B0002", name: "通識測試2", shortName: "通識測試2", department: "通識", introduction: "", language: "國語", type: "藝術", credits: 2, hour: 2, schedule: [501, 502, 503], place: "E202", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
             Course(id: "B0003", name: "通識測試3", shortName: "通識測試3", department: "通識", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [401, 402, 505], place: "E303", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0")
-        ]))
+        ]), favoriteCourses: Binding.constant([]))
     }
 }

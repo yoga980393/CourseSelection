@@ -25,7 +25,7 @@ struct ContentView: View {
                     Label("通識課程", systemImage: "person.circle")
                 }
             
-            FavoritesView(selectedCourses: $selectedCourses)
+            FavoritesView(selectedCourses: $selectedCourses, favoriteCourses: $favoriteCourses)
                 .tabItem {
                     Label("收藏夾", systemImage: "folder")
                 }
