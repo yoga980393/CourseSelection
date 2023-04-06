@@ -11,6 +11,7 @@ struct CourseDetailView: View {
     var course: Course
     @Binding var selectedCourses: [Course]
     @State private var showAlert = false
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
             ZStack {
@@ -52,6 +53,17 @@ struct CourseDetailView: View {
                         .padding()
                     }
                 }
+                
+                VStack {
+                                HStack {
+                                    CustomBackButton(action: {
+                                        presentationMode.wrappedValue.dismiss()
+                                    })
+                                    Spacer()
+                                }
+                                Spacer()
+                            }
+                            .padding()
             }
         }
     
