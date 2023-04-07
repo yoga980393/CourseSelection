@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct HomePageView: View {
+    @State var CoursesAlreadyInTheSchedule: [Course] = []
+    
     var body: some View {
         NavigationView {
             GeometryReader { geometry in
@@ -22,7 +24,7 @@ struct HomePageView: View {
                     }
                     
                     HStack {
-                        NavigationLink(destination: MainCourseSelectionView().navigationBarBackButtonHidden(true).navigationBarTitle("")) {
+                        NavigationLink(destination: MainCourseSelectionView(CoursesAlreadyInTheSchedule: $CoursesAlreadyInTheSchedule).navigationBarBackButtonHidden(true).navigationBarTitle("")) {
                             ImageRow(imageName: "001", name: "選課系統", location: "選課系統", width: imageRowWidth)
                         }
                         
@@ -34,11 +36,7 @@ struct HomePageView: View {
                     }
                     
                     HStack {
-                        NavigationLink(destination: ScheduleView(selectedCourses: .constant([
-                            Course(id: "B0001", name: "通識測試1", shortName: "通識測試1", department: "必修", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [303, 304], place: "E101", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
-                            Course(id: "B0002", name: "通識測試2", shortName: "通識測試2", department: "通識", introduction: "", language: "國語", type: "藝術", credits: 2, hour: 2, schedule: [501, 502, 503], place: "E202", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
-                            Course(id: "B0003", name: "通識測試3", shortName: "通識測試3", department: "通識", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [401, 402, 505], place: "E303", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0")
-                        ])).navigationBarBackButtonHidden(true).navigationBarTitle("")) {
+                        NavigationLink(destination: ScheduleView(selectedCourses: $CoursesAlreadyInTheSchedule).navigationBarBackButtonHidden(true).navigationBarTitle("")) {
                             ImageRow(imageName: "003", name: "目前課表", location: "課表、上課提醒", width: imageRowWidth)
                         }
                         Spacer()
@@ -53,6 +51,31 @@ struct HomePageView: View {
                 .padding(.horizontal, screenWidth * 0.04)
             }
         }
+        .onAppear {
+            fetchData()
+        }
+    }
+    
+    func fetchData() {
+        guard let url = Bundle.main.url(forResource: "CoursesAlreadyInTheSchedule", withExtension: "json") else {
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data else {
+                return
+            }
+            
+            do {
+                let decodedData = try JSONDecoder().decode([Course].self, from: data)
+                
+                DispatchQueue.main.async {
+                    self.CoursesAlreadyInTheSchedule = decodedData
+                }
+            } catch {
+                print("Error decoding JSON: \(error)")
+            }
+        }.resume()
     }
 }
 

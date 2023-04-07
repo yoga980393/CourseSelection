@@ -17,6 +17,7 @@ struct GeneralCourseView: View {
     @State private var courseToUnenroll: Course?
     @State private var courseConflict: Course? = nil
     @Binding var isThirdLevelViewActive: Bool
+    @Binding var CoursesAlreadyInTheSchedule: [Course]
     
     var body: some View {
         GeometryReader { geometry in
@@ -67,6 +68,13 @@ struct GeneralCourseView: View {
                 .background(Color.white)
                 .edgesIgnoringSafeArea(.bottom)
                 .navigationBarTitle("普通課程", displayMode: .inline)
+            }
+            .onAppear {
+                for course in CoursesAlreadyInTheSchedule {
+                    if selectedCourses.firstIndex(where: { $0 == course }) == nil {
+                        selectedCourses.append(course)
+                    }
+                }
             }
             .navigationViewStyle(.stack)
         }
@@ -184,6 +192,6 @@ struct GeneralCourseView_Previews: PreviewProvider {
             Course(id: "B0001", name: "通識測試1", shortName: "通識測試1", department: "必修", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [303, 304], place: "", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
             Course(id: "B0002", name: "通識測試2", shortName: "通識測試2", department: "通識", introduction: "", language: "國語", type: "藝術", credits: 2, hour: 2, schedule: [501, 502, 503], place: "", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
             Course(id: "B0003", name: "通識測試3", shortName: "通識測試2", department: "通識", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [501, 502, 201], place: "", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0")
-        ]),selectedCourses: Binding.constant([]), favoriteCourses: Binding.constant([]), isThirdLevelViewActive: Binding.constant(false))
+        ]),selectedCourses: Binding.constant([]), favoriteCourses: Binding.constant([]), isThirdLevelViewActive: Binding.constant(false), CoursesAlreadyInTheSchedule: Binding.constant([]))
     }
 }

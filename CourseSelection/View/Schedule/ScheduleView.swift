@@ -65,15 +65,35 @@ struct ScheduleView: View {
     }
     
     private func courseBlocksForCourse(course: Course) -> some View {
-        ForEach(Array(course.schedule.sorted().enumerated()), id: \.offset) { index, schedule in
-            let showText = index == 0 || course.schedule[index - 1] != schedule - 1
-            if let nextSchedule = course.schedule.first(where: { $0 == schedule + 1 }) {
-                courseBlock(course: course, startSchedule: schedule, endSchedule: nextSchedule, showText: showText)
-            } else {
-                courseBlock(course: course, startSchedule: schedule, endSchedule: nil, showText: showText)
+        let sortedSchedules = course.schedule.sorted()
+        var startSchedule = sortedSchedules[0]
+        var endSchedule: Int?
+        var courseBlocks = [AnyView]()
+
+        for i in 1..<sortedSchedules.count {
+            let schedule = sortedSchedules[i]
+            let prevSchedule = sortedSchedules[i - 1]
+
+            if schedule != prevSchedule + 1 {
+                endSchedule = prevSchedule
+                let showText = true
+                courseBlocks.append(AnyView(courseBlock(course: course, startSchedule: startSchedule, endSchedule: endSchedule, showText: showText)))
+                startSchedule = schedule
+                endSchedule = nil
+            }
+        }
+
+        endSchedule = sortedSchedules.last
+        let showText = true
+        courseBlocks.append(AnyView(courseBlock(course: course, startSchedule: startSchedule, endSchedule: endSchedule, showText: showText)))
+
+        return Group {
+            ForEach(courseBlocks.indices, id: \.self) { index in
+                courseBlocks[index]
             }
         }
     }
+
     
     private func courseBlock(course: Course, startSchedule: Int, endSchedule: Int?, showText: Bool) -> some View {
         let day = (startSchedule / 100) - 1
@@ -87,47 +107,56 @@ struct ScheduleView: View {
         }
         
         let maxTextLength = 8
-        let singleBlock = blockHeight == rowHeight - padding * 2
+        
+        let length = (endSchedule.map { ($0 % 100) - 1 } ?? classIndex) - classIndex
+        let yOffset: CGFloat
+        switch length {
+        case 0:
+            yOffset = 0
+        case 1:
+            yOffset = 20
+        case 2:
+            yOffset = 60
+        default:
+            yOffset = 100
+        }
+        let shortNameFontSize: CGFloat
+        let placeFontSize: CGFloat
+        switch length {
+        case 0:
+            shortNameFontSize = 12
+            placeFontSize = 10
+        case 1:
+            shortNameFontSize = 15
+            placeFontSize = 13
+        case 2:
+            shortNameFontSize = 15
+            placeFontSize = 13
+        default:
+            shortNameFontSize = 15
+            placeFontSize = 13
+        }
         
         return ZStack {
-            if let courseIndex = selectedCourses.firstIndex(of: course) {
-                RoundedRectangle(cornerRadius: 5)
-                    .fill(courseColors[courseIndex % courseColors.count])
-                    .frame(width: ((UIScreen.main.bounds.width * 0.95) / 6) - padding * 2, height: blockHeight)
-                    .zIndex(0)
-            } else {
-                RoundedRectangle(cornerRadius: 5)
-                    .fill(Color.gray)
-                    .frame(width: ((UIScreen.main.bounds.width * 0.95) / 6) - padding * 2, height: blockHeight)
-                    .zIndex(0)
-            }
+            let courseIndex = selectedCourses.firstIndex(of: course)!
+            RoundedRectangle(cornerRadius: 5)
+                .fill(courseColors[courseIndex % courseColors.count])
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black, lineWidth: 1))
+                .frame(width: ((UIScreen.main.bounds.width * 0.95) / 6) - padding * 2, height: blockHeight)
+
             
             if showText {
                 ZStack {
-                    if singleBlock {
-                        Text(textHoldUp(oldStr: course.shortName, maxLength: maxTextLength))
-                            .font(.system(size: 12))
-                            .foregroundColor(.black)
-                            .position(x: UIScreen.main.bounds.width * 0.46, y: 628)
-                        
-                        Text(textHoldUp(oldStr: course.place, maxLength: maxTextLength))
-                            .font(.system(size: 10))
-                            .foregroundColor(.black)
-                            .position(x: UIScreen.main.bounds.width * 0.55, y: 620)
-                    } else {
-                        Text(textHoldUp(oldStr: course.shortName, maxLength: maxTextLength))
-                            .font(.system(size: 13))
-                            .foregroundColor(.black)
-                            .position(x: UIScreen.main.bounds.width * 0.46, y: 595)
-                            .zIndex(1)
-                        
-                        Text(textHoldUp(oldStr: course.place, maxLength: maxTextLength))
-                            .font(.system(size: 10))
-                            .foregroundColor(.black)
-                            .position(x: UIScreen.main.bounds.width * 0.55, y: 580)
-                    }
+                    Text(textHoldUp(oldStr: course.shortName, maxLength: maxTextLength))
+                        .font(.system(size: shortNameFontSize))
+                        .foregroundColor(.black)
+                        .position(x: UIScreen.main.bounds.width * 0.46, y: 628 - yOffset)
+
+                    Text(textHoldUp(oldStr: course.place, maxLength: maxTextLength))
+                        .font(.system(size: placeFontSize))
+                        .foregroundColor(.black)
+                        .position(x: UIScreen.main.bounds.width * 0.55, y: 620 - yOffset)
                 }
-                .zIndex(1)
             }
         }
         .position(x: ((UIScreen.main.bounds.width * 0.95) / 6) * CGFloat(day + 1) + ((UIScreen.main.bounds.width * 0.95) / 9.1), y: 25 + rowHeight * CGFloat(classIndex) + (blockHeight / 2) + padding)
