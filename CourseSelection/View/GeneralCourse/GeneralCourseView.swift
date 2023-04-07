@@ -67,11 +67,6 @@ struct GeneralCourseView: View {
                 .background(Color.white)
                 .edgesIgnoringSafeArea(.bottom)
                 .navigationBarTitle("普通課程", displayMode: .inline)
-                .toolbar {
-                    ToolbarItem(placement: .bottomBar) {
-                        Spacer()
-                    }
-                }
             }
             .navigationViewStyle(.stack)
         }

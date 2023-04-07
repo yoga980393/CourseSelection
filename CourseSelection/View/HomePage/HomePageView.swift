@@ -17,9 +17,7 @@ struct HomePageView: View {
                 let imageHeight = screenHeight * 0.30
                 
                 VStack {
-                    Button {
-                        
-                    } label: {
+                    NavigationLink(destination: SchoolWebsiteView().navigationBarBackButtonHidden(true).navigationBarTitle("")) {
                         FullImageRow(imageName: "000", name: "中華大學", location: "學校資訊、常用網站", height: imageHeight)
                     }
                     
@@ -30,9 +28,7 @@ struct HomePageView: View {
                         
                         Spacer()
                         
-                        Button {
-                            
-                        } label: {
+                        NavigationLink(destination: GradingView().navigationBarBackButtonHidden(true).navigationBarTitle("")) {
                             ImageRow(imageName: "002", name: "成績查詢", location: "歷年成績、畢業門檻", width: imageRowWidth)
                         }
                     }

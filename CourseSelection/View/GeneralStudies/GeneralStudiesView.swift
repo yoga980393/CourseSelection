@@ -18,22 +18,25 @@ struct GeneralStudiesView: View {
     @State private var conflictCourse: Course?
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                ForEach(0..<chosenVolunteers.count, id: \.self) { index in
-                    VolunteerView(CouresList: $courseList, rank: index + 1, choose: $chosenVolunteers[index])
-                        .padding(.bottom, 10)
-                        .onTapGesture {
-                            currentlySelectedVolunteerIndex = index
-                            showGeneralStudiesList = true
-                        }
-                        .onLongPressGesture {
-                            showAlertForDelete = true
-                            currentlySelectedVolunteerIndex = index
-                        }
+        NavigationView{
+            ScrollView {
+                VStack(alignment: .leading) {
+                    ForEach(0..<chosenVolunteers.count, id: \.self) { index in
+                        VolunteerView(CouresList: $courseList, rank: index + 1, choose: $chosenVolunteers[index])
+                            .padding(.bottom, 10)
+                            .onTapGesture {
+                                currentlySelectedVolunteerIndex = index
+                                showGeneralStudiesList = true
+                            }
+                            .onLongPressGesture {
+                                showAlertForDelete = true
+                                currentlySelectedVolunteerIndex = index
+                            }
+                    }
                 }
+                .padding()
             }
-            .padding()
+            .navigationBarTitle("通識課程", displayMode: .inline)
         }
         .sheet(isPresented: $showGeneralStudiesList) {
             GeneralStudiesList(courseList: $courseList, selectedCourseIndex: Binding(

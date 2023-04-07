@@ -23,25 +23,29 @@ struct FavoritesView: View {
     ]
     
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                ScrollView {
-                    ZStack {
-                        Color.white
-                        
-                        Background()
-                            .frame(height: 1200)
-                        
-                        courseBlocks
+        NavigationView {
+            GeometryReader { geometry in
+                ZStack {
+                    ScrollView {
+                        ZStack {
+                            Color.white
+                            
+                            Background()
+                                .frame(height: 1200)
+                            
+                            courseBlocks
+                        }
                     }
+                    favoriteCoursesButton(geometry: geometry) // 传递 geometry 参数
                 }
-                favoriteCoursesButton(geometry: geometry) // 传递 geometry 参数
-            }
-            .sheet(isPresented: $showingFavoriteCoursesSheet) {
-                FavoriteCoursesList(favoriteCourses: $favoriteCourses, selectedCourses: $selectedCourses)
+                .navigationBarTitle("收藏夾", displayMode: .inline)
+                .sheet(isPresented: $showingFavoriteCoursesSheet) {
+                    FavoriteCoursesList(favoriteCourses: $favoriteCourses, selectedCourses: $selectedCourses)
+                }
             }
         }
     }
+
     
     private var courseBlocks: some View {
         ForEach(selectedCourses) { course in
@@ -242,9 +246,6 @@ struct FavoriteCoursesList: View {
         }
     }
 }
-
-
-
 
 struct FavoritesView_Previews: PreviewProvider {
     static var previews: some View {
