@@ -14,7 +14,7 @@ struct HomePageView: View {
                 let screenWidth = geometry.size.width
                 let screenHeight = geometry.size.height
                 let imageRowWidth = screenWidth * 0.45
-                let imageHeight = screenHeight * 0.30
+                let imageHeight = screenHeight * 0.28
                 
                 VStack {
                     NavigationLink(destination: SchoolWebsiteView().navigationBarBackButtonHidden(true).navigationBarTitle("")) {
