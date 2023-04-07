@@ -14,7 +14,7 @@ struct Background: View {
     
     var body: some View {
         GeometryReader { geometry in
-            let tableWidth = geometry.size.width * 0.9
+            let tableWidth = geometry.size.width * 0.95
             let cellWidth = tableWidth / CGFloat(daysOfWeek.count + 1)
             let firstRowHeight: CGFloat = 25
             let cellHeight = rowHeight

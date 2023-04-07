@@ -13,7 +13,7 @@ struct PhysicalEducation: View {
     @State var wordX: [CGFloat] = [55, 155, 55, 155]
     @State var wordY: [CGFloat] = [65, 65, 160, 160]
     @State var title: [String] = ["體育(一)(二)", "體育必修", "體適能", "游泳"]
-    @State var PE: [String]
+    @Binding var PE: [String]
     
     var body: some View {
         Color.white
@@ -46,11 +46,5 @@ struct PhysicalEducation: View {
                         .position(x: wordX[3], y: wordY[3])
                 }
             }
-    }
-}
-
-struct PhysicalEducation_Previews: PreviewProvider {
-    static var previews: some View {
-        PhysicalEducation(PE: ["2", "2", "通過", "未通過"])
     }
 }

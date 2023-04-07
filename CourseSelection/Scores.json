@@ -1,0 +1,152 @@
+[
+    {
+        "year": 109,
+        "semester": "上",
+        "number": "104B02117",
+        "department": "資訊工程學系",
+        "name": "程式設計實習(一)",
+        "type": "必修",
+        "credits": 1,
+        "score": 92
+    },
+    {
+        "year": 109,
+        "semester": "下",
+        "number": "094B02208",
+        "department": "資訊工程學系",
+        "name": "C++程式設計",
+        "type": "必修",
+        "credits": 3,
+        "score": 92
+    },
+    {
+        "year": 110,
+        "semester": "上",
+        "number": "105B02307",
+        "department": "資訊工程學系",
+        "name": "軟體工程",
+        "type": "必修",
+        "credits": 3,
+        "score": 10
+    },
+    {
+        "year": 110,
+        "semester": "下",
+        "number": "106B91X03",
+        "department": "通識教育中心",
+        "name": "社會習查：城市旅行",
+        "type": "核心通識",
+        "credits": 2,
+        "score": 83
+    },
+    {
+        "year": 110,
+        "semester": "下",
+        "number": "110B02302",
+        "department": "資訊工程學系",
+        "name": "互動設計",
+        "type": "選修",
+        "credits": 3,
+        "score": 96
+    },
+    {
+        "year": 111,
+        "semester": "上",
+        "number": "111B02405",
+        "department": "資訊工程學系",
+        "name": "網路安全",
+        "type": "選修",
+        "credits": 3,
+        "score": 88
+    },
+    {
+        "year": 111,
+        "semester": "下",
+        "number": "112B02410",
+        "department": "資訊工程學系",
+        "name": "機器學習",
+        "type": "選修",
+        "credits": 3,
+        "score": 85
+    },
+    {
+        "year": 111,
+        "semester": "上",
+        "number": "111B02503",
+        "department": "資訊工程學系",
+        "name": "數據結構與演算法",
+        "type": "必修",
+        "credits": 3,
+        "score": 80
+    },
+    {
+        "year": 112,
+        "semester": "上",
+        "number": "112B02606",
+        "department": "資訊工程學系",
+        "name": "作業系統",
+        "type": "必修",
+        "credits": 3,
+        "score": 76
+    },
+    {
+        "year": 112,
+        "semester": "上",
+        "number": "112B02611",
+        "department": "資訊工程學系",
+        "name": "電子商務",
+        "type": "選修",
+        "credits": 2,
+        "score": 89
+    },
+    {
+        "year": 112,
+        "semester": "下",
+        "number": "113B02712",
+        "department": "資訊工程學系",
+        "name": "網頁設計",
+        "type": "選修",
+        "credits": 2,
+        "score": 95
+    },
+    {
+        "year": 112,
+        "semester": "下",
+        "number": "113B02715",
+        "department": "資訊工程學系",
+        "name": "物聯網應用",
+        "type": "選修",
+        "credits": 3,
+        "score": 88
+    },
+    {
+        "year": 113,
+        "semester": "上",
+        "number": "113B02810",
+        "department": "資訊工程學系",
+        "name": "雲端運算",
+        "type": "選修",
+        "credits": 3,
+        "score": 92
+    },
+    {
+        "year": 113,
+        "semester": "上",
+        "number": "114B91X07",
+        "department": "通識教育中心",
+        "name": "跨文化溝通",
+        "type": "核心通識",
+        "credits": 2,
+        "score": 86
+    },
+    {
+        "year": 113,
+        "semester": "下",
+        "number": "114B91X11",
+        "department": "通識教育中心",
+        "name": "心理學概論",
+        "type": "核心通識",
+        "credits": 2,
+        "score": 90
+    }
+]

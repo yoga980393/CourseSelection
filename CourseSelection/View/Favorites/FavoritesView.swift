@@ -45,7 +45,7 @@ struct FavoritesView: View {
             }
         }
     }
-
+    
     
     private var courseBlocks: some View {
         ForEach(selectedCourses) { course in
@@ -82,12 +82,12 @@ struct FavoritesView: View {
             if let courseIndex = selectedCourses.firstIndex(of: course) {
                 RoundedRectangle(cornerRadius: 5)
                     .fill(courseColors[courseIndex % courseColors.count])
-                    .frame(width: ((UIScreen.main.bounds.width * 0.9) / 6) - padding * 2, height: blockHeight)
+                    .frame(width: ((UIScreen.main.bounds.width * 0.95) / 6) - padding * 2, height: blockHeight)
                     .zIndex(0)
             } else {
                 RoundedRectangle(cornerRadius: 5)
                     .fill(Color.gray)
-                    .frame(width: ((UIScreen.main.bounds.width * 0.9) / 6) - padding * 2, height: blockHeight)
+                    .frame(width: ((UIScreen.main.bounds.width * 0.95) / 6) - padding * 2, height: blockHeight)
                     .zIndex(0)
             }
             
@@ -119,7 +119,7 @@ struct FavoritesView: View {
                 .zIndex(1)
             }
         }
-        .position(x: ((UIScreen.main.bounds.width * 0.9) / 6) * CGFloat(day + 1) + ((UIScreen.main.bounds.width * 0.9) / 7.17), y: 25 + rowHeight * CGFloat(classIndex) + (blockHeight / 2) + padding)
+        .position(x: ((UIScreen.main.bounds.width * 0.95) / 6) * CGFloat(day + 1) + ((UIScreen.main.bounds.width * 0.95) / 9.1), y: 25 + rowHeight * CGFloat(classIndex) + (blockHeight / 2) + padding)
     }
     
     private func favoriteCoursesButton(geometry: GeometryProxy) -> some View {
@@ -160,7 +160,7 @@ struct FavoriteCoursesList: View {
     @State private var alertMessage = ""
     @State private var alertPrimaryButton: Alert.Button = .default(Text(""))
     @State private var secondaryButtonSwitch = false
-
+    
     var body: some View {
         NavigationView {
             List {
@@ -169,6 +169,7 @@ struct FavoriteCoursesList: View {
                         addToSelectedCourses(course: course)
                     }) {
                         TextImageRow(course: course, isSelected: false, isFavorite: false)
+                            .frame(width: UIScreen.main.bounds.width)
                     }
                 }
             }
@@ -181,11 +182,11 @@ struct FavoriteCoursesList: View {
             secondaryButtonCtrl()
         }
     }
-
+    
     private func dismiss() {
         presentationMode.wrappedValue.dismiss()
     }
-
+    
     private func addToSelectedCourses(course: Course) {
         if let index = favoriteCourses.firstIndex(of: course) {
             if hasTimeConflict(course: course, selectedCourses: selectedCourses) {
@@ -209,7 +210,7 @@ struct FavoriteCoursesList: View {
             }
         }
     }
-
+    
     private func hasTimeConflict(course: Course, selectedCourses: [Course]) -> Bool {
         for selectedCourse in selectedCourses {
             if !Set(course.schedule).isDisjoint(with: Set(selectedCourse.schedule)) {
@@ -218,7 +219,7 @@ struct FavoriteCoursesList: View {
         }
         return false
     }
-
+    
     private func getConflictingCourse(course: Course, selectedCourses: [Course]) -> Course? {
         for selectedCourse in selectedCourses {
             if !Set(course.schedule).isDisjoint(with: Set(selectedCourse.schedule)) {
@@ -253,6 +254,8 @@ struct FavoritesView_Previews: PreviewProvider {
             Course(id: "B0001", name: "通識測試1", shortName: "通識測試1", department: "必修", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [303, 304], place: "E101", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
             Course(id: "B0002", name: "通識測試2", shortName: "通識測試2", department: "通識", introduction: "", language: "國語", type: "藝術", credits: 2, hour: 2, schedule: [501, 502, 503], place: "E202", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
             Course(id: "B0003", name: "通識測試3", shortName: "通識測試3", department: "通識", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [401, 402, 505], place: "E303", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0")
-        ]), favoriteCourses: Binding.constant([]))
+        ]), favoriteCourses: Binding.constant([Course(id: "B0001", name: "通識測試1", shortName: "通識測試1", department: "必修", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [303, 304], place: "E101", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
+                                               Course(id: "B0002", name: "通識測試2", shortName: "通識測試2", department: "通識", introduction: "", language: "國語", type: "藝術", credits: 2, hour: 2, schedule: [501, 502, 503], place: "E202", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
+                                               Course(id: "B0003", name: "通識測試3", shortName: "通識測試3", department: "通識", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [401, 402, 505], place: "E303", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0")]))
     }
 }

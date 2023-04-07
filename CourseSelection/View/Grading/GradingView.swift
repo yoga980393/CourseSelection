@@ -8,38 +8,38 @@
 import SwiftUI
 
 struct GradingView: View {
-    @State var score: [Score] = [
-        Score(year: 109, semester: "上", number: "104B02117", department: "資訊工程學系", name: "程式設計實習(一)", type: "必修", credits: 1, score: 92),
-        Score(year: 109, semester: "下", number: "094B02208", department: "資訊工程學系", name: "C++程式設計", type: "必修", credits: 3, score: 92),
-        Score(year: 110, semester: "上", number: "105B02307", department: "資訊工程學系", name: "軟體工程", type: "必修", credits: 3, score: 10),
-        Score(year: 110, semester: "下", number: "106B91X03", department: "通識教育中心", name: "社會習查：城市旅行", type: "核心通識", credits: 2, score: 83),
-        Score(year: 110, semester: "下", number: "110B02302", department: "資訊工程學系", name: "互動設計", type: "選修", credits: 3, score: 96),
-    ]
-    
+    @State var score: [Score] = []
     @State private var selectedTab = 0
     @State var switch1: Bool = false
     @State var switch2: Bool = false
     @State var switch3: Bool = false
     @State var temp = 0
+    @State var got: [Int] = [0, 0, 0, 0, 0, 0, 0, 0]
+    @State var GeneralStudies: [Int] = [0, 0, 0, 0, 0, 0, 0, 0]
+    @State var PE: [String] = ["", "", "", ""]
     @Environment(\.presentationMode) var presentationMode
-
+    
     var body: some View {
         ZStack {
             TabView(selection: $selectedTab) {
-                CreditsView(switch1: $switch1, switch2: $switch2)
+                CreditsView(switch1: $switch1, switch2: $switch2, got: $got)
                     .tabItem {
                         Label("學分查詢", systemImage: "graduationcap.fill")
                     }
                     .tag(0)
-
-                GradesView(score: score, temp: $temp, switch3: $switch3)
+                
+                GradesView(score: $score, temp: $temp, switch3: $switch3)
                     .tabItem {
                         Label("成績查詢", systemImage: "chart.bar.fill")
                     }
                     .tag(1)
             }
-            .opacity(switch1 || switch2 || switch3 ? 0.5 : 1) // Change the opacity based on the switch values
-
+            .opacity(switch1 || switch2 || switch3 ? 0.5 : 1)
+            .onAppear {
+                fetchData()
+                fetchData_score()
+            }
+            
             if(switch1 || switch2 || switch3) {
                 Color.black
                     .opacity(0.1)
@@ -54,11 +54,11 @@ struct GradingView: View {
                     }
             }
             
-            CourseSelection.GeneralStudies(GeneralStudies: [2, 2, 2, 0, 2, 2, 10, 6])
+            CourseSelection.GeneralStudies(GeneralStudies: $GeneralStudies)
                 .cornerRadius(5)
                 .opacity(!switch1 ? 0 : 1)
             
-            CourseSelection.PhysicalEducation(PE: ["2", "2", "通過", "未通過"])
+            CourseSelection.PhysicalEducation(PE: $PE)
                 .cornerRadius(5)
                 .opacity(!switch2 ? 0 : 1)
             
@@ -85,6 +85,52 @@ struct GradingView: View {
             .padding()
             .padding(.top, -5)
         }
+    }
+    
+    func fetchData() {
+        guard let url = Bundle.main.url(forResource: "credit", withExtension: "json") else {
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data else {
+                return
+            }
+            
+            do {
+                let decodedData = try JSONDecoder().decode(CreditInfo.self, from: data)
+                
+                DispatchQueue.main.async {
+                    self.got = creditInfoToArray(gotJson: decodedData)
+                    self.GeneralStudies = generalEducationToArray(gotJson: decodedData)
+                    self.PE = physicalEducationToArray(gotJson: decodedData)
+                }
+            } catch {
+                print("Error decoding JSON: \(error)")
+            }
+        }.resume()
+    }
+    
+    func fetchData_score() {
+        guard let url = Bundle.main.url(forResource: "Scores", withExtension: "json") else {
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data else {
+                return
+            }
+            
+            do {
+                let decodedData = try JSONDecoder().decode([Score].self, from: data)
+                
+                DispatchQueue.main.async {
+                    self.score = decodedData
+                }
+            } catch {
+                print("Error decoding JSON: \(error)")
+            }
+        }.resume()
     }
 }
 

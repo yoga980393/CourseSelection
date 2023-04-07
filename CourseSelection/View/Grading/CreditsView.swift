@@ -14,12 +14,13 @@ struct CreditsView: View {
         (UIScreen.main.bounds.width - 10) * 0.85 + 5
     ]
     let wordY: [CGFloat] = [75, 155, 235, 315, 395, 475, 555, 635]
-    @State var got: [Int] = [39, 48, 6, 16, 6, 4, 2, 115]
+    
     @State var due: [Int] = [43, 48, 9, 22, 6, 4, 2, 128]
     @State var GeneralStudies: [Int] = [2, 2, 2, 0, 2, 2, 10, 6]
     @State var PE: [String] = ["2", "2", "通過", "未通過"]
     @Binding var switch1: Bool
     @Binding var switch2: Bool
+    @Binding var got: [Int]
     
     var body: some View {
         GraduationThreshold()
@@ -70,6 +71,6 @@ struct CreditsView: View {
 
 struct CreditsView_Previews: PreviewProvider {
     static var previews: some View {
-        CreditsView(switch1: Binding.constant(false), switch2: Binding.constant(false))
+        CreditsView(switch1: Binding.constant(false), switch2: Binding.constant(false), got: Binding.constant([0, 0, 0, 0, 0, 0, 0, 0]))
     }
 }

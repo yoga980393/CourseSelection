@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Score {
+struct Score: Codable {
     var year: Int
     var semester: String
     var number: String

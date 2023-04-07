@@ -12,7 +12,7 @@ struct GeneralStudies: View {
     @State var y: [CGFloat] = [5, 55, 105, 155, 205, 255]
     @State var list1: [String] = ["社會關懷", "創新創意", "健康促進", "合計"]
     @State var list2: [String] = ["人文涵養", "藝術感知", "自我探索", "社會習查", "科學探究", "生醫衛保"]
-    @State var GeneralStudies: [Int]
+    @Binding var GeneralStudies: [Int]
     
     var body: some View {
         Color.white
@@ -76,11 +76,5 @@ struct GeneralStudies: View {
                 }
 
             }
-    }
-}
-
-struct GeneralStudies_Previews: PreviewProvider {
-    static var previews: some View {
-        GeneralStudies(GeneralStudies: [2, 2, 2, 0, 2, 2, 10, 6])
     }
 }

@@ -34,12 +34,13 @@ struct HomePageView: View {
                     }
                     
                     HStack {
-                        Button {
-                            
-                        } label: {
+                        NavigationLink(destination: ScheduleView(selectedCourses: .constant([
+                            Course(id: "B0001", name: "通識測試1", shortName: "通識測試1", department: "必修", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [303, 304], place: "E101", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
+                            Course(id: "B0002", name: "通識測試2", shortName: "通識測試2", department: "通識", introduction: "", language: "國語", type: "藝術", credits: 2, hour: 2, schedule: [501, 502, 503], place: "E202", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
+                            Course(id: "B0003", name: "通識測試3", shortName: "通識測試3", department: "通識", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [401, 402, 505], place: "E303", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0")
+                        ])).navigationBarBackButtonHidden(true).navigationBarTitle("")) {
                             ImageRow(imageName: "003", name: "目前課表", location: "課表、上課提醒", width: imageRowWidth)
                         }
-                        
                         Spacer()
                         
                         Button {
