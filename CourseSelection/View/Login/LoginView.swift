@@ -15,6 +15,7 @@ struct LoginView: View {
         Account(account: "B10802204", password: "123", name: "張祐嘉"),
         Account(account: "B10802222", password: "345", name: "ABC")
     ]
+    @Binding var user:Account
     
     @State private var showAlert = false
     @State private var alertMessage = ""
@@ -49,7 +50,9 @@ struct LoginView: View {
             
             HStack{
                 Button{
-                    
+                    if let url = URL(string: "https://lis.chu.edu.tw/p/404-1052-23350.php?Lang=zh-tw") {
+                        UIApplication.shared.open(url)
+                    }
                 }label: {
                     Text("忘記密碼")
                 }
@@ -93,6 +96,7 @@ struct LoginView: View {
         if let account = Accounts.first(where: { $0.account == username }) {
             if account.password == password {
                 withAnimation(.easeInOut(duration: 0.5)) {
+                    user = account
                     isLoggedIn = true
                 }
             } else {
@@ -108,6 +112,6 @@ struct LoginView: View {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView(isLoggedIn: Binding.constant(false))
+        LoginView(isLoggedIn: Binding.constant(false), user: Binding.constant(Account(account: "", password: "", name: "")))
     }
 }

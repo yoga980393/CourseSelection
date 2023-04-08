@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomePageView: View {
     @State var CoursesAlreadyInTheSchedule: [Course] = []
+    @Binding var user:Account
     
     var body: some View {
         NavigationView {
@@ -82,7 +83,7 @@ struct HomePageView: View {
 
 struct HomePageView_Previews: PreviewProvider {
     static var previews: some View {
-        HomePageView()
+        HomePageView(user: Binding.constant(Account(account: "", password: "", name: "")))
     }
 }
 
