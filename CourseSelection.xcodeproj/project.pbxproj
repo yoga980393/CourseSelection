@@ -114,6 +114,14 @@
 			path = GeneralStudies;
 			sourceTree = "<group>";
 		};
+		C109514929E1667100ABDEA2 /* MainCourseSelection */ = {
+			isa = PBXGroup;
+			children = (
+				C1235C3529DEAEA200101F6D /* MainCourseSelectionView.swift */,
+			);
+			path = MainCourseSelection;
+			sourceTree = "<group>";
+		};
 		C1235C3229DEAB6D00101F6D /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -144,6 +152,7 @@
 		C136672529C89BFE009B6FA3 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C109514929E1667100ABDEA2 /* MainCourseSelection */,
 				C18DB4C229E021D4000AA7CA /* Schedule */,
 				C18DB4BB29DFD793000AA7CA /* SchoolWebsite */,
 				C17B49A629DEE8C8007FB2F3 /* Grading */,
@@ -152,7 +161,6 @@
 				C1DDDE9829DAB7D200F1728A /* Favorites */,
 				C103A5B929D6959300F1F442 /* GeneralStudies */,
 				C136672829C89C74009B6FA3 /* GeneralCourse */,
-				C1235C3529DEAEA200101F6D /* MainCourseSelectionView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

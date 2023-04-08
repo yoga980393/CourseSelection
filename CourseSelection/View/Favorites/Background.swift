@@ -43,7 +43,7 @@ struct Background: View {
     
     @ViewBuilder
     private func verticalLines(tableWidth: CGFloat, cellWidth: CGFloat, firstRowHeight: CGFloat) -> some View {
-        ForEach(0..<daysOfWeek.count) { index in
+        ForEach(0..<daysOfWeek.count, id: \.self) { index in
             Path { path in
                 let xOffset = cellWidth * CGFloat(index + 1)
                 path.move(to: CGPoint(x: xOffset, y: 0))
@@ -55,7 +55,7 @@ struct Background: View {
     
     @ViewBuilder
     private func daysOfWeekLabels(tableWidth: CGFloat, cellWidth: CGFloat, firstRowHeight: CGFloat) -> some View {
-        ForEach(0..<daysOfWeek.count) { index in
+        ForEach(0..<daysOfWeek.count, id: \.self) { index in
             Text(daysOfWeek[index])
                 .position(x: cellWidth * CGFloat(index + 1) + cellWidth / 2, y: firstRowHeight / 2)
         }
@@ -63,7 +63,7 @@ struct Background: View {
     
     @ViewBuilder
     private func horizontalLines(tableWidth: CGFloat, firstRowHeight: CGFloat, cellHeight: CGFloat) -> some View {
-        ForEach(0..<time.count + 1) { index in
+        ForEach(0..<time.count + 1, id: \.self) { index in
             Path { path in
                 let yOffset = firstRowHeight + cellHeight * CGFloat(index)
                 path.move(to: CGPoint(x: 0, y: yOffset))
@@ -75,7 +75,7 @@ struct Background: View {
     
     @ViewBuilder
     private func timeLabels(tableWidth: CGFloat, cellWidth: CGFloat, firstRowHeight: CGFloat, cellHeight: CGFloat) -> some View {
-        ForEach(0..<time.count) { index in
+        ForEach(0..<time.count, id: \.self) { index in
             VStack {
                 Text("第\(time[index].clause)節")
                 Text(time[index].period)
