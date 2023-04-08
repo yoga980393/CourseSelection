@@ -10,7 +10,11 @@ import SwiftUI
 struct SettingView: View {
     @EnvironmentObject var themeSettings: ThemeSettings
     @Environment(\.presentationMode) var presentationMode
+    let colors: [String: Color] = ["藍色": .blue, "綠色": .green, "紅色": .red, "橙色": .orange, "紫色": .purple]
+    @Binding var user: Account
+    @Binding var isLoggedIn: Bool
 
+    
     var body: some View {
         ZStack {
             NavigationView {
@@ -22,6 +26,10 @@ struct SettingView: View {
                                 .scaledToFit()
                                 .frame(width: 60, height: 60)
                                 .clipShape(Circle())
+                            
+                            Spacer() // 新增 Spacer
+                                .frame(width: 20) // 調整間隔寬度
+                            
                             VStack(alignment: .leading) {
                                 Text("姓名")
                                     .font(.headline)
@@ -33,18 +41,31 @@ struct SettingView: View {
                     
                     Section(header: Text("顯示設定")) {
                         Toggle(isOn: $themeSettings.isDarkMode) { // 修改此行
-                                                Text("黑夜模式")
-                                            }
+                            Text("黑夜模式")
+                        }
                         
-                        NavigationLink(destination: ColorSettingView()) {
+                        HStack {
                             Text("系統顏色設定")
+                            Spacer()
+                            Picker("Accent Color", selection: $themeSettings.accentColor) {
+                                ForEach(colors.keys.sorted(), id: \.self) { key in
+                                    Text(key)
+                                        .foregroundColor(colors[key])
+                                        .tag(colors[key]!) // 添加 tag 修飾符
+                                }
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
                         }
                     }
                     
                     Section {
                         Button("登出") {
-                            // 登出功能
+                            withAnimation(.easeInOut(duration: 0.5)) {
+                                user = Account(account: "", password: "", name: "")
+                                isLoggedIn = false
+                            }
                         }
+                        .foregroundColor(themeSettings.accentColor)
                     }
                 }
                 .listStyle(InsetGroupedListStyle())
@@ -67,16 +88,15 @@ struct SettingView: View {
     }
 }
 
-struct ColorSettingView: View {
-    var body: some View {
-        Text("系統顏色設定")
-            .navigationTitle("顏色設定")
+struct SettingView_Previews: PreviewProvider {
+    static var previews: some View {
+        SettingView(user: Binding.constant(Account(account: "", password: "", name: "")), isLoggedIn: Binding.constant(true))
+            .environmentObject(ThemeSettings())
     }
 }
 
-struct SettingView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingView()
-            .environmentObject(ThemeSettings())
+extension Color {
+    var id: String {
+        "\(self.description)"
     }
 }

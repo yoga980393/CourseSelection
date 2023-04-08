@@ -97,6 +97,7 @@ struct LoginView: View {
             if account.password == password {
                 withAnimation(.easeInOut(duration: 0.5)) {
                     user = account
+                    password = ""
                     isLoggedIn = true
                 }
             } else {

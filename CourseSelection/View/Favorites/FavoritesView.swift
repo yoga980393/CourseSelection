@@ -68,11 +68,11 @@ struct FavoritesView: View {
         var startSchedule = sortedSchedules[0]
         var endSchedule: Int?
         var courseBlocks = [AnyView]()
-
+        
         for i in 1..<sortedSchedules.count {
             let schedule = sortedSchedules[i]
             let prevSchedule = sortedSchedules[i - 1]
-
+            
             if schedule != prevSchedule + 1 {
                 endSchedule = prevSchedule
                 let showText = true
@@ -81,18 +81,18 @@ struct FavoritesView: View {
                 endSchedule = nil
             }
         }
-
+        
         endSchedule = sortedSchedules.last
         let showText = true
         courseBlocks.append(AnyView(courseBlock(course: course, startSchedule: startSchedule, endSchedule: endSchedule, showText: showText)))
-
+        
         return Group {
             ForEach(courseBlocks.indices, id: \.self) { index in
                 courseBlocks[index]
             }
         }
     }
-
+    
     
     private func courseBlock(course: Course, startSchedule: Int, endSchedule: Int?, showText: Bool) -> some View {
         let day = (startSchedule / 100) - 1
@@ -141,7 +141,7 @@ struct FavoritesView: View {
             RoundedRectangle(cornerRadius: 5)
                 .fill(courseColors[courseIndex % courseColors.count])
                 .frame(width: ((UIScreen.main.bounds.width * 0.95) / 6) - padding * 2, height: blockHeight)
-
+            
             
             if showText {
                 ZStack {
@@ -149,7 +149,7 @@ struct FavoritesView: View {
                         .font(.system(size: shortNameFontSize))
                         .foregroundColor(.black)
                         .position(x: UIScreen.main.bounds.width * 0.46, y: 628 - yOffset)
-
+                    
                     Text(textHoldUp(oldStr: course.place, maxLength: maxTextLength))
                         .font(.system(size: placeFontSize))
                         .foregroundColor(.black)
@@ -165,11 +165,11 @@ struct FavoritesView: View {
         var startSchedule = sortedSchedules[0]
         var endSchedule: Int?
         var courseBlocks = [AnyView]()
-
+        
         for i in 1..<sortedSchedules.count {
             let schedule = sortedSchedules[i]
             let prevSchedule = sortedSchedules[i - 1]
-
+            
             if schedule != prevSchedule + 1 {
                 endSchedule = prevSchedule
                 let showText = true
@@ -178,11 +178,11 @@ struct FavoritesView: View {
                 endSchedule = nil
             }
         }
-
+        
         endSchedule = sortedSchedules.last
         let showText = true
         courseBlocks.append(AnyView(SelectedCourseBlock(course: course, startSchedule: startSchedule, endSchedule: endSchedule, showText: showText)))
-
+        
         return Group {
             ForEach(courseBlocks.indices, id: \.self) { index in
                 courseBlocks[index]
@@ -238,7 +238,7 @@ struct FavoritesView: View {
                 .fill(courseColors[courseIndex % courseColors.count])
                 .overlay(RoundedRectangle(cornerRadius: 5).stroke(themeSettings.isDarkMode ? Color.white : Color.black, lineWidth: 1))
                 .frame(width: ((UIScreen.main.bounds.width * 0.95) / 6) - padding * 2, height: blockHeight)
-
+            
             
             if showText {
                 ZStack {
@@ -246,7 +246,7 @@ struct FavoritesView: View {
                         .font(.system(size: shortNameFontSize))
                         .foregroundColor(.black)
                         .position(x: UIScreen.main.bounds.width * 0.46, y: 628 - yOffset)
-
+                    
                     Text(textHoldUp(oldStr: course.place, maxLength: maxTextLength))
                         .font(.system(size: placeFontSize))
                         .foregroundColor(.black)
@@ -270,7 +270,7 @@ struct FavoritesView: View {
                         .resizable()
                         .frame(width: 24, height: 24)
                         .padding()
-                        .background(Color.blue)
+                        .background(themeSettings.accentColor)
                         .foregroundColor(.white)
                         .clipShape(Circle())
                         .shadow(radius: 5)
@@ -310,9 +310,12 @@ struct FavoriteCoursesList: View {
                 }
             }
             .navigationTitle("收藏課程")
-            .navigationBarItems(trailing: Button("關閉") {
-                dismiss()
-            })
+            .navigationBarItems(trailing:
+                Button("關閉") {
+                    dismiss()
+                }
+                .foregroundColor(themeSettings.accentColor)
+            )
         }
         .environment(\.colorScheme, themeSettings.isDarkMode ? .dark : .light)
         .alert(isPresented: $showAlert) {

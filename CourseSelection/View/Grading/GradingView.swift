@@ -18,6 +18,7 @@ struct GradingView: View {
     @State var GeneralStudies: [Int] = [0, 0, 0, 0, 0, 0, 0, 0]
     @State var PE: [String] = ["", "", "", ""]
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     var body: some View {
         ZStack {
@@ -34,6 +35,7 @@ struct GradingView: View {
                     }
                     .tag(1)
             }
+            .accentColor(themeSettings.accentColor)
             .opacity(switch1 || switch2 || switch3 ? 0.5 : 1)
             .onAppear {
                 fetchData()

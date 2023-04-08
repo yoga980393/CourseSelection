@@ -123,7 +123,7 @@ struct FilterBar: View {
                 }
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color.blue, lineWidth: 2)
+                        .stroke(themeSettings.accentColor, lineWidth: 2)
                 )
                 .frame(width: geometry.size.width)
                 .background(themeSettings.isDarkMode ? Color(red: 87/255, green: 88/255, blue: 87/255) : Color.white)

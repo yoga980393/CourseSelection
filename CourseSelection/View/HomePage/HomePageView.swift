@@ -9,8 +9,9 @@ import SwiftUI
 
 struct HomePageView: View {
     @State var CoursesAlreadyInTheSchedule: [Course] = []
-    @Binding var user:Account
+    @Binding var user: Account
     @EnvironmentObject var themeSettings: ThemeSettings
+    @Binding var isLoggedIn: Bool
     
     var body: some View {
         NavigationView {
@@ -43,7 +44,7 @@ struct HomePageView: View {
                         }
                         Spacer()
                         
-                        NavigationLink(destination: SettingView().navigationBarBackButtonHidden(true).navigationBarTitle("")) {
+                        NavigationLink(destination: SettingView(user: $user, isLoggedIn: $isLoggedIn).navigationBarBackButtonHidden(true).navigationBarTitle("")) {
                             ImageRow(imageName: "004", name: "系統設定", location: "通知設定、帳號設定", width: imageRowWidth)
                         }
                     }
@@ -83,7 +84,7 @@ struct HomePageView: View {
 
 struct HomePageView_Previews: PreviewProvider {
     static var previews: some View {
-        HomePageView(user: Binding.constant(Account(account: "", password: "", name: "")))
+        HomePageView(user: Binding.constant(Account(account: "", password: "", name: "")), isLoggedIn: Binding.constant(true))
             .environmentObject(ThemeSettings())
     }
 }

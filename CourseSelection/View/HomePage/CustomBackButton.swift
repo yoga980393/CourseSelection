@@ -9,14 +9,15 @@ import SwiftUI
 
 struct CustomBackButton: View {
     let action: () -> Void
+    @EnvironmentObject var themeSettings: ThemeSettings
 
     var body: some View {
         Button(action: action) {
             HStack {
                 Image(systemName: "chevron.backward")
-                    .foregroundColor(.blue)
+                    .foregroundColor(themeSettings.accentColor)
                 Text("Back")
-                    .foregroundColor(.blue)
+                    .foregroundColor(themeSettings.accentColor)
             }
             .background(Color.clear)
         }

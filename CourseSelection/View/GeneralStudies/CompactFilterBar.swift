@@ -19,26 +19,26 @@ struct CompactFilterBar: View {
                 ForEach(1...5, id: \.self) { day in
                     Text("星期\(weekToString(week: day))").tag(Int?(day))
                 }
-            }.pickerStyle(.menu)
+            }.pickerStyle(.menu).accentColor(themeSettings.accentColor)
 
             Picker(selection: $filter.period, label: Text("Period")) {
                 Text("節數").tag(Int?.none)
                 ForEach(1...14, id: \.self) { period in
                     Text("第\(period)節").tag(Int?(period))
                 }
-            }.pickerStyle(.menu)
+            }.pickerStyle(.menu).accentColor(themeSettings.accentColor)
 
             Picker(selection: $filter.type, label: Text("Type")) {
                 Text("開課類別").tag(String?.none)
                 ForEach(Array(Set(courseList.map(\.type))).sorted(), id: \.self) { type in
                     Text(type).tag(String?(type))
                 }
-            }.pickerStyle(.menu)
+            }.pickerStyle(.menu).accentColor(themeSettings.accentColor)
         }
         .padding(.horizontal)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.blue, lineWidth: 2)
+                .stroke(themeSettings.accentColor, lineWidth: 2)
         )
         .background(themeSettings.isDarkMode ? Color.black : Color.white)
         .cornerRadius(16)

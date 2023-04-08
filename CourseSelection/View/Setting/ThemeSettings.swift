@@ -10,4 +10,5 @@ import Combine
 
 class ThemeSettings: ObservableObject {
     @Published var isDarkMode: Bool = false
+    @Published var accentColor: Color = Color.blue
 }

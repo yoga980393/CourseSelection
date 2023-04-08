@@ -47,6 +47,7 @@ struct GradesView: View {
 struct GradesHeaderView: View {
     let uniqueSemesters: [String]
     @Binding var selectedSemester: String?
+    @EnvironmentObject var themeSettings: ThemeSettings
 
     var body: some View {
         HStack {
@@ -68,6 +69,7 @@ struct GradesHeaderView: View {
                     Text("學期")
                     Image(systemName: "chevron.down")
                 }
+                .foregroundColor(themeSettings.accentColor)
             }
             .frame(minWidth: 0, maxWidth: .infinity)
 

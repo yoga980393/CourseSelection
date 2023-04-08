@@ -57,7 +57,7 @@ struct GeneralCourseView: View {
                                     .fontWeight(.bold)
                                     .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                                     .background(Color(.systemGray6))
-                                    .foregroundColor(.blue)
+                                    .foregroundColor(themeSettings.accentColor)
                                     .cornerRadius(10)
                             }
                         }
