@@ -10,6 +10,7 @@ import SwiftUI
 struct ScheduleView: View {
     @Binding var selectedCourses: [Course]
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     let rowHeight: CGFloat = 80
     private let courseColors: [Color] = [
@@ -29,7 +30,7 @@ struct ScheduleView: View {
                     ZStack {
                         ScrollView {
                             ZStack {
-                                Color.white
+                                Color(themeSettings.isDarkMode ? .black : .white)
                                 
                                 Background()
                                     .frame(height: 1200)
@@ -141,7 +142,7 @@ struct ScheduleView: View {
             let courseIndex = selectedCourses.firstIndex(of: course)!
             RoundedRectangle(cornerRadius: 5)
                 .fill(courseColors[courseIndex % courseColors.count])
-                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black, lineWidth: 1))
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(themeSettings.isDarkMode ? .white : .black, lineWidth: 1))
                 .frame(width: ((UIScreen.main.bounds.width * 0.95) / 6) - padding * 2, height: blockHeight)
 
             
@@ -170,5 +171,6 @@ struct ScheduleView_Previews: PreviewProvider {
             Course(id: "B0002", name: "通識測試2", shortName: "通識測試2", department: "通識", introduction: "", language: "國語", type: "藝術", credits: 2, hour: 2, schedule: [501, 502, 503], place: "E202", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
             Course(id: "B0003", name: "通識測試3", shortName: "通識測試3", department: "通識", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [401, 402, 505], place: "E303", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0")
         ]))
+        .environmentObject(ThemeSettings())
     }
 }

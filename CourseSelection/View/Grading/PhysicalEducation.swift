@@ -14,9 +14,10 @@ struct PhysicalEducation: View {
     @State var wordY: [CGFloat] = [65, 65, 160, 160]
     @State var title: [String] = ["體育(一)(二)", "體育必修", "體適能", "游泳"]
     @Binding var PE: [String]
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     var body: some View {
-        Color.white
+        Color(themeSettings.isDarkMode ? .black : .white)
             .frame(width: 210, height: 200)
             .overlay {
                 Path { path in

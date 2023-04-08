@@ -19,6 +19,8 @@ struct GeneralStudiesList: View {
     @State private var filter = CourseFilter()
     @State private var showAlertForConflict = false
     @State private var conflictingCourse: Course?
+    
+    @EnvironmentObject var themeSettings: ThemeSettings
 
     var body: some View {
         GeometryReader { geometry in
@@ -56,6 +58,7 @@ struct GeneralStudiesList: View {
                   message: Text("所選課程與「 \(conflictingCourse?.name ?? "") 」衝堂。請選擇其他課程。"),
                   dismissButton: .default(Text("確定")))
         }
+        .environment(\.colorScheme, themeSettings.isDarkMode ? .dark : .light)
     }
 
     private func hasConflict(selectedCourse: Course) -> Bool {

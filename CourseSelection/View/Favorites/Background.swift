@@ -11,6 +11,7 @@ struct Background: View {
     let rowHeight: CGFloat = 80
     let daysOfWeek: [String] = ["一", "二", "三", "四", "五"]
     let time: [Time] = [Time(clause: "一", period: "8:30~9:20"), Time(clause: "二", period: "9:25~10:25"), Time(clause: "三", period: "10:25~11:15"), Time(clause: "四", period: "11:20~12:10"), Time(clause: "五", period: "13:10~14:00"), Time(clause: "六", period: "14:10~15:00"), Time(clause: "七", period: "15:10~16:00"), Time(clause: "八", period: "16:10~17:00"), Time(clause: "九", period: "17:05~17:55"), Time(clause: "Ａ", period: "18:00~18:45"), Time(clause: "Ｂ", period: "18:45~19:30"), Time(clause: "Ｃ", period: "19:40~20:25"), Time(clause: "Ｄ", period: "20:25~21:10"), Time(clause: "Ｅ", period: "21:15~22:00")]
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     var body: some View {
         GeometryReader { geometry in
@@ -22,7 +23,7 @@ struct Background: View {
             HStack{
                 Spacer()
                 ZStack {
-                    Color.white
+                    Color(themeSettings.isDarkMode ? .black : .white)
                         .edgesIgnoringSafeArea(.all)
                     
                     verticalLines(tableWidth: tableWidth, cellWidth: cellWidth, firstRowHeight: firstRowHeight)
@@ -91,5 +92,6 @@ struct Background: View {
 struct Background_Previews: PreviewProvider {
     static var previews: some View {
         Background()
+            .environmentObject(ThemeSettings())
     }
 }

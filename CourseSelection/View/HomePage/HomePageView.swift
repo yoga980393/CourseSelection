@@ -10,6 +10,7 @@ import SwiftUI
 struct HomePageView: View {
     @State var CoursesAlreadyInTheSchedule: [Course] = []
     @Binding var user:Account
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     var body: some View {
         NavigationView {
@@ -42,9 +43,7 @@ struct HomePageView: View {
                         }
                         Spacer()
                         
-                        Button {
-                            
-                        } label: {
+                        NavigationLink(destination: SettingView().navigationBarBackButtonHidden(true).navigationBarTitle("")) {
                             ImageRow(imageName: "004", name: "系統設定", location: "通知設定、帳號設定", width: imageRowWidth)
                         }
                     }
@@ -52,6 +51,7 @@ struct HomePageView: View {
                 .padding(.horizontal, screenWidth * 0.04)
             }
         }
+        .environment(\.colorScheme, themeSettings.isDarkMode ? .dark : .light)
         .onAppear {
             fetchData()
         }
@@ -84,6 +84,7 @@ struct HomePageView: View {
 struct HomePageView_Previews: PreviewProvider {
     static var previews: some View {
         HomePageView(user: Binding.constant(Account(account: "", password: "", name: "")))
+            .environmentObject(ThemeSettings())
     }
 }
 

@@ -18,6 +18,7 @@ struct GeneralCourseView: View {
     @State private var courseConflict: Course? = nil
     @Binding var isThirdLevelViewActive: Bool
     @Binding var CoursesAlreadyInTheSchedule: [Course]
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     var body: some View {
         GeometryReader { geometry in
@@ -31,8 +32,15 @@ struct GeneralCourseView: View {
                             courseRow(course: course)
                         }
                         
-                        Color.white
-                            .frame(height: 70)
+                        if(themeSettings.isDarkMode){
+                            Color.black
+                                .frame(height: 70)
+                        }else{
+                            Color.white
+                                .frame(height: 70)
+                        }
+                        
+                        
                     }
                     .listStyle(.plain)
                     .padding(.top, isFilterBarExpanded ? 160 : 60)
@@ -61,11 +69,18 @@ struct GeneralCourseView: View {
                         }
                     }
                     
-                    Color(red: 247/255, green: 248/255, blue: 247/255)
-                        .frame(width: 1000, height: 100)
-                        .position(y: 800)
+                    if(themeSettings.isDarkMode){
+                        Color(red: 87/255, green: 88/255, blue: 87/255)
+                            .frame(width: 1000, height: 100)
+                            .position(y: 800)
+                    }else{
+                        Color(red: 247/255, green: 248/255, blue: 247/255)
+                            .frame(width: 1000, height: 100)
+                            .position(y: 800)
+                    }
+                    
                 }
-                .background(Color.white)
+                .background(themeSettings.isDarkMode ? Color(red: 87/255, green: 88/255, blue: 87/255) : Color.white)
                 .edgesIgnoringSafeArea(.bottom)
                 .navigationBarTitle("普通課程", displayMode: .inline)
             }
@@ -193,5 +208,6 @@ struct GeneralCourseView_Previews: PreviewProvider {
             Course(id: "B0002", name: "通識測試2", shortName: "通識測試2", department: "通識", introduction: "", language: "國語", type: "藝術", credits: 2, hour: 2, schedule: [501, 502, 503], place: "", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
             Course(id: "B0003", name: "通識測試3", shortName: "通識測試2", department: "通識", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [501, 502, 201], place: "", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0")
         ]),selectedCourses: Binding.constant([]), favoriteCourses: Binding.constant([]), isThirdLevelViewActive: Binding.constant(false), CoursesAlreadyInTheSchedule: Binding.constant([]))
+        .environmentObject(ThemeSettings())
     }
 }

@@ -11,6 +11,7 @@ struct TextImageRow: View {
     @State var course: Course
     var isSelected: Bool
     var isFavorite: Bool
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     var body: some View {
         HStack(alignment: .center, spacing: 15) {
@@ -42,6 +43,7 @@ struct TextImageRow: View {
             }
         }
         .frame(height: 105)
+        .environment(\.colorScheme, themeSettings.isDarkMode ? .dark : .light)
     }
 }
 
@@ -88,6 +90,7 @@ struct CourseTags: View {
 
 struct TagText: View {
     let text: String
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     var body: some View {
         Text(text)
@@ -96,6 +99,10 @@ struct TagText: View {
             .padding(.all, text.count > 3 ? 4 : 3)
             .background(Color.black)
             .cornerRadius(5)
+            .overlay(
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(themeSettings.isDarkMode ? Color.white : Color.clear, lineWidth: 1)
+            )
     }
 }
 
@@ -103,5 +110,7 @@ struct TagText: View {
 struct TextImageRow_Previews: PreviewProvider {
     static var previews: some View {
         TextImageRow(course: Course(id: "B0001", name: "通識測試2", shortName: "通識測試1", department: "通識", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [501, 502, 201], place: "", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),isSelected: true, isFavorite: true)
+            .environmentObject(ThemeSettings())
     }
 }
+

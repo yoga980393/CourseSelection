@@ -13,9 +13,10 @@ struct GeneralStudies: View {
     @State var list1: [String] = ["社會關懷", "創新創意", "健康促進", "合計"]
     @State var list2: [String] = ["人文涵養", "藝術感知", "自我探索", "社會習查", "科學探究", "生醫衛保"]
     @Binding var GeneralStudies: [Int]
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     var body: some View {
-        Color.white
+        Color(themeSettings.isDarkMode ? .black : .white)
             .frame(width: 330, height: 260)
             .overlay {
                 Path { path in

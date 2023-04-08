@@ -21,6 +21,7 @@ struct CreditsView: View {
     @Binding var switch1: Bool
     @Binding var switch2: Bool
     @Binding var got: [Int]
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     var body: some View {
         GraduationThreshold()
@@ -43,7 +44,7 @@ struct CreditsView: View {
                     Text(textHoldUp(oldStr: "", maxLength: 0))
                         .foregroundColor(.black.opacity(0.1))
                         .frame(width: SCwidth * 0.2 - 5, height: 75)
-                        .background(.gray.opacity(0.2))
+                        .background(themeSettings.isDarkMode ? .white.opacity(0.2):.gray.opacity(0.2))
                         .cornerRadius(5)
                         .position(x: SCwidth * 0.3 + 5, y: wordY[3])
                         .onTapGesture {
@@ -55,7 +56,7 @@ struct CreditsView: View {
                     Text(textHoldUp(oldStr: "", maxLength: 0))
                         .foregroundColor(.black.opacity(0.1))
                         .frame(width: SCwidth * 0.2 - 5, height: 75)
-                        .background(.gray.opacity(0.2))
+                        .background(themeSettings.isDarkMode ? .white.opacity(0.2):.gray.opacity(0.2))
                         .cornerRadius(5)
                         .position(x: SCwidth * 0.3 + 5, y: wordY[5])
                         .onTapGesture {
@@ -72,5 +73,6 @@ struct CreditsView: View {
 struct CreditsView_Previews: PreviewProvider {
     static var previews: some View {
         CreditsView(switch1: Binding.constant(false), switch2: Binding.constant(false), got: Binding.constant([0, 0, 0, 0, 0, 0, 0, 0]))
+            .environmentObject(ThemeSettings())
     }
 }

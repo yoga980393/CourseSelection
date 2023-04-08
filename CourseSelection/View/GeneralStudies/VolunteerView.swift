@@ -11,6 +11,7 @@ struct VolunteerView: View {
     @Binding var CouresList: [Course]
     @State var rank: Int
     @Binding var choose: Int
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     var body: some View {
         VStack {
@@ -21,17 +22,19 @@ struct VolunteerView: View {
             
             if(choose < 0){
                 ZStack {
-                    Color.white
-                        .frame(height: 118)
+                    Color(themeSettings.isDarkMode ? UIColor.systemGray6 : UIColor.systemBackground)
+                        .frame(height: 120)
                     
                     Text("待選")
                         .font(.system(size: 30))
-                        .foregroundColor(.gray)
+                        .foregroundColor(themeSettings.isDarkMode ? .white : .gray)
                 }
+                .clipShape(RoundedRectangle(cornerRadius: 10))
             }else{
                 TextImageRow(course: CouresList[choose], isSelected: false, isFavorite: false)
             }
         }
         .id(choose)
+        .frame(height: 160)
     }
 }

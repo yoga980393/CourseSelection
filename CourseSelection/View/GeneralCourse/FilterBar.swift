@@ -40,6 +40,7 @@ struct FilterBar: View {
     @Binding var selectedCourses: [Course]
     @Binding var favoriteCourses: [Course]
     @Binding var isExpanded: Bool
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     var body: some View {
         if isExpanded {
@@ -125,7 +126,7 @@ struct FilterBar: View {
                         .stroke(Color.blue, lineWidth: 2)
                 )
                 .frame(width: geometry.size.width)
-                .background(Color.white)
+                .background(themeSettings.isDarkMode ? Color(red: 87/255, green: 88/255, blue: 87/255) : Color.white)
                 .cornerRadius(16)
             }
         }

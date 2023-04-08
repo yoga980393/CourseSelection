@@ -16,6 +16,7 @@ struct SchoolWebsiteView: View {
     @State private var showContents: [Bool] = Array(repeating: false, count: 3)
     @State private var offsetY: [CGFloat] = Array(repeating: 0, count: 3)
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var themeSettings: ThemeSettings
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -54,7 +55,7 @@ struct SchoolWebsiteView: View {
 
             VStack {
                 HStack {
-                    Color.white
+                    Color(themeSettings.isDarkMode ? .black:.white)
                         .frame(width: 80, height: 30)
                         .cornerRadius(10)
                         .overlay(
@@ -63,8 +64,8 @@ struct SchoolWebsiteView: View {
                             })
                         )
                     Spacer()
-                    Color.white
-                        .frame(width: 180, height: 30)
+                    Color(themeSettings.isDarkMode ? .black:.white)
+                        .frame(width: 190, height: 30)
                         .cornerRadius(10)
                         .overlay(
                             Text("\(Date().getFormattedWeekday()), \(Date().getFormattedDate())")
@@ -98,5 +99,6 @@ extension Date {
 struct SchoolWebsiteView_Previews: PreviewProvider {
     static var previews: some View {
         SchoolWebsiteView()
+            .environmentObject(ThemeSettings())
     }
 }

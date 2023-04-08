@@ -86,23 +86,21 @@ struct GradeRow: View {
     @Binding var temp: Int
     @Binding var switch3: Bool
     let index: Int
+    @EnvironmentObject var themeSettings: ThemeSettings
 
     var body: some View {
         HStack {
             Group {
                 Text("\(grade.year) \(grade.semester)")
-                    .foregroundColor(.black)
                 Text(grade.name)
-                    .foregroundColor(.black)
                     .font(.system(size: 15))
                 Text("\(grade.credits)")
-                    .foregroundColor(.black)
                 Text("\(grade.score)")
                     .foregroundColor(grade.score > 60 ? .green : .red)
             }
             .frame(minWidth: 0, maxWidth: .infinity)
         }
-        .listRowBackground(index % 2 == 0 ? Color("light grey") : Color.white)
+        .listRowBackground(index % 2 == 0 ? themeSettings.isDarkMode ? Color.gray : Color("light grey") : themeSettings.isDarkMode ? Color.black : Color.white)
         .onTapGesture {
             temp = index
             withAnimation {
@@ -116,5 +114,7 @@ struct GradeRow: View {
 struct GradesView_Previews: PreviewProvider {
     static var previews: some View {
         GradesView(score: Binding.constant([Score(year: 109, semester: "上", number: "104B02117", department: "資訊工程學系", name: "程式設計實習(一)", type: "必修", credits: 1, score: 92),Score(year: 109, semester: "下", number: "094B02208", department: "資訊工程學系", name: "C++程式設計", type: "必修", credits: 3, score: 92),Score(year: 110, semester: "上", number: "105B02307", department: "資訊工程學系", name: "軟體工程", type: "必修", credits: 3, score: 10),Score(year: 110, semester: "下", number: "106B91X03", department: "通識教育中心", name: "社會習查：城市旅行", type: "核心通識", credits: 2, score: 83),Score(year: 110, semester: "下", number: "110B02302", department: "資訊工程學系", name: "互動設計", type: "選修", credits: 3, score: 96)]), temp: Binding.constant(0), switch3: Binding.constant(false))
+            .environmentObject(ThemeSettings())
+//            .preferredColorScheme(.dark)
     }
 }

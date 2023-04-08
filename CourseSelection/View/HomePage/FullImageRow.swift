@@ -12,6 +12,7 @@ struct FullImageRow: View {
     var name: String
     var location: String
     var height: CGFloat
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -23,7 +24,7 @@ struct FullImageRow: View {
             
             VStack(alignment: .leading) {
                 Text(name)
-                    .foregroundColor(.black)
+                    .foregroundColor(themeSettings.isDarkMode ? .white : .black)
                     .font(.system(.title2, design: .rounded))
                 
                 Text(location)

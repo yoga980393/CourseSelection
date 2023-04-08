@@ -10,6 +10,7 @@ import SwiftUI
 struct CompactFilterBar: View {
     @Binding var filter: CourseFilter
     @Binding var courseList: [Course]
+    @EnvironmentObject var themeSettings: ThemeSettings
 
     var body: some View {
         HStack {
@@ -39,7 +40,7 @@ struct CompactFilterBar: View {
             RoundedRectangle(cornerRadius: 16)
                 .stroke(Color.blue, lineWidth: 2)
         )
-        .background(Color.white)
+        .background(themeSettings.isDarkMode ? Color.black : Color.white)
         .cornerRadius(16)
     }
 }

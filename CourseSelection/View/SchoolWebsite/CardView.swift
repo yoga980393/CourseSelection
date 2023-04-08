@@ -10,6 +10,7 @@ import SwiftUI
 struct CardView: View {
     @State var information: Information
     @Binding var isShowContent: Bool
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -24,6 +25,10 @@ struct CardView: View {
                         .overlay(
                             SummaryView(information: information, isShowContent: $isShowContent)
                                 .cornerRadius(self.isShowContent ? 0 : 15)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(themeSettings.isDarkMode ? Color.white : Color.clear, lineWidth: 1)
                         )
                     
                     if self.isShowContent {
@@ -64,6 +69,8 @@ struct CardView: View {
 struct SummaryView: View {
     @State var information: Information
     @Binding var isShowContent: Bool
+    @EnvironmentObject var themeSettings: ThemeSettings
+    
     var body: some View {
         VStack(alignment: .leading) {
             Spacer()
@@ -97,12 +104,13 @@ struct SummaryView: View {
                     }
                 )
         }
-        .foregroundColor(.white)
+        .foregroundColor(themeSettings.isDarkMode ? .black:.white)
     }
 }
 
 struct cardView_Previews: PreviewProvider {
     static var previews: some View {
         CardView(information: Information(name: "中華大學官網", type: "學校", image: "chu01", url: "https://www.chu.edu.tw/"), isShowContent: Binding.constant(false))
+            .environmentObject(ThemeSettings())
     }
 }

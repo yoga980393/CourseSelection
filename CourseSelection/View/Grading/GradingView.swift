@@ -138,5 +138,6 @@ struct GradingView: View {
 struct GradingView_Previews: PreviewProvider {
     static var previews: some View {
         GradingView()
+            .environmentObject(ThemeSettings())
     }
 }

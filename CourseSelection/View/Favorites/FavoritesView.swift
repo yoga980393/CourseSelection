@@ -11,6 +11,7 @@ struct FavoritesView: View {
     @Binding var favoriteCourses: [Course]
     @State private var showingFavoriteCoursesSheet = false
     @Binding var CoursesAlreadyInTheSchedule: [Course]
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     let rowHeight: CGFloat = 80
     private let courseColors: [Color] = [
@@ -29,7 +30,7 @@ struct FavoritesView: View {
                 ZStack {
                     ScrollView {
                         ZStack {
-                            Color.white
+                            Color(themeSettings.isDarkMode ? .black : .white)
                             
                             Background()
                                 .frame(height: 1200)
@@ -235,7 +236,7 @@ struct FavoritesView: View {
             let courseIndex = selectedCourses.firstIndex(of: course)!
             RoundedRectangle(cornerRadius: 5)
                 .fill(courseColors[courseIndex % courseColors.count])
-                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black, lineWidth: 1))
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(themeSettings.isDarkMode ? Color.white : Color.black, lineWidth: 1))
                 .frame(width: ((UIScreen.main.bounds.width * 0.95) / 6) - padding * 2, height: blockHeight)
 
             
@@ -294,6 +295,7 @@ struct FavoriteCoursesList: View {
     @State private var alertMessage = ""
     @State private var alertPrimaryButton: Alert.Button = .default(Text(""))
     @State private var secondaryButtonSwitch = false
+    @EnvironmentObject var themeSettings: ThemeSettings
     
     var body: some View {
         NavigationView {
@@ -312,6 +314,7 @@ struct FavoriteCoursesList: View {
                 dismiss()
             })
         }
+        .environment(\.colorScheme, themeSettings.isDarkMode ? .dark : .light)
         .alert(isPresented: $showAlert) {
             secondaryButtonCtrl()
         }
@@ -389,5 +392,6 @@ struct FavoritesView_Previews: PreviewProvider {
             Course(id: "B0002", name: "通識測試2", shortName: "通識測試2", department: "通識", introduction: "", language: "國語", type: "藝術", credits: 2, hour: 2, schedule: [501, 502, 503], place: "E202", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),
             Course(id: "B0003", name: "通識測試3", shortName: "通識測試3", department: "通識", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [401, 402, 505], place: "E303", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0")
         ]), favoriteCourses: Binding.constant([Course(id: "B0001", name: "通識測試1", shortName: "通識測試1", department: "必修", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [303, 304], place: "E101", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),Course(id: "B0002", name: "通識測試2", shortName: "通識測試2", department: "通識", introduction: "", language: "國語", type: "藝術", credits: 2, hour: 2, schedule: [501, 502, 503], place: "E202", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0"),Course(id: "B0003", name: "通識測試3", shortName: "通識測試3", department: "通識", introduction: "", language: "國語", type: "人文", credits: 2, hour: 2, schedule: [401, 402, 505], place: "E303", numberOfPeople: 50, maxOfPeople: 60, teacher: "張三", image: "test0")]), CoursesAlreadyInTheSchedule: Binding.constant([]))
+        .environmentObject(ThemeSettings())
     }
 }
