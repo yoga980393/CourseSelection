@@ -88,7 +88,7 @@ struct GradingView: View {
     }
     
     func fetchData() {
-        guard let url = Bundle.main.url(forResource: "credit", withExtension: "json") else {
+        guard let url = URL(string: "https://raw.githubusercontent.com/yoga980393/jsonTest/main/credit.json") else {
             return
         }
         
@@ -112,7 +112,7 @@ struct GradingView: View {
     }
     
     func fetchData_score() {
-        guard let url = Bundle.main.url(forResource: "Scores", withExtension: "json") else {
+        guard let url = URL(string: "https://raw.githubusercontent.com/yoga980393/jsonTest/main/Scores.json") else {
             return
         }
         

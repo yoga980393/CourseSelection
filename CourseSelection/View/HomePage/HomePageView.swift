@@ -57,7 +57,7 @@ struct HomePageView: View {
     }
     
     func fetchData() {
-        guard let url = Bundle.main.url(forResource: "CoursesAlreadyInTheSchedule", withExtension: "json") else {
+        guard let url = URL(string: "https://raw.githubusercontent.com/yoga980393/jsonTest/main/CoursesAlreadyInTheSchedule.json") else {
             return
         }
         

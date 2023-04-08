@@ -10,8 +10,15 @@ import SwiftUI
 struct LoginView: View {
     @State private var username: String = ""
     @State private var password: String = ""
-    @State var Count = 0
-
+    @Binding var isLoggedIn: Bool
+    @State var Accounts: [Account] = [
+        Account(account: "B10802204", password: "123", name: "張祐嘉"),
+        Account(account: "B10802222", password: "345", name: "ABC")
+    ]
+    
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+    
     var body: some View {
         VStack {
             VStack{
@@ -53,7 +60,7 @@ struct LoginView: View {
                 .cornerRadius(10)
                 
                 Button {
-                    Count = 0
+                    checkCredentials()
                 } label: {
                     Text("登入")
                 }
@@ -65,11 +72,42 @@ struct LoginView: View {
             }
             Spacer()
         }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("錯誤"), message: Text(alertMessage), dismissButton: .default(Text("確定")))
+        }
+    }
+    
+    private func checkCredentials() {
+        if username.isEmpty {
+            alertMessage = "請輸入帳號"
+            showAlert = true
+            return
+        }
+        
+        if password.isEmpty {
+            alertMessage = "請輸入密碼"
+            showAlert = true
+            return
+        }
+        
+        if let account = Accounts.first(where: { $0.account == username }) {
+            if account.password == password {
+                withAnimation(.easeInOut(duration: 0.5)) {
+                    isLoggedIn = true
+                }
+            } else {
+                alertMessage = "密碼錯誤"
+                showAlert = true
+            }
+        } else {
+            alertMessage = "無此帳號"
+            showAlert = true
+        }
     }
 }
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView(isLoggedIn: Binding.constant(false))
     }
 }
