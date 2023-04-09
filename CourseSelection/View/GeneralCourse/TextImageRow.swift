@@ -14,35 +14,41 @@ struct TextImageRow: View {
     @EnvironmentObject var themeSettings: ThemeSettings
     
     var body: some View {
-        HStack(alignment: .center, spacing: 15) {
-            CourseImage(image: course.image)
-            
-            VStack(alignment: .leading) {
-                CourseBasicInfo(course: course)
+        ZStack{
+            HStack(alignment: .center, spacing: 15) {
+                CourseImage(image: course.image)
                 
-                ForEach(displaySchedule(course: course), id: \.self) { scheduleText in
-                    Text(scheduleText)
-                        .font(.system(size: 15))
-                        .foregroundColor(.gray)
-                }
-                
-                Spacer()
-                
-                CourseTags(course: course)
-            }
-            
-            VStack {
-                if isSelected { // 在此添加條件標記
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.green)
-                }
-                if isFavorite { // 在此添加條件標記
-                    Image(systemName: "star.circle.fill")
-                        .foregroundColor(.yellow)
+                VStack(alignment: .leading) {
+                    CourseBasicInfo(course: course)
+                    
+                    ForEach(displaySchedule(course: course), id: \.self) { scheduleText in
+                        Text(scheduleText)
+                            .font(.system(size: 15))
+                            .foregroundColor(.gray)
+                    }
+                    
+                    Spacer()
+                    
+                    CourseTags(course: course)
                 }
             }
+            .frame(height: 105)
+            
+            HStack {
+                    Spacer()
+                    VStack {
+                        if isSelected { // 在此添加條件標記
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        if isFavorite { // 在此添加條件標記
+                            Image(systemName: "star.circle.fill")
+                                .foregroundColor(.yellow)
+                        }
+                    }
+                    .padding(.trailing, 20)
+                }
         }
-        .frame(height: 105)
         .environment(\.colorScheme, themeSettings.isDarkMode ? .dark : .light)
     }
 }

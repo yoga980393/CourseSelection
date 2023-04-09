@@ -66,11 +66,6 @@ struct GeneralStudiesView: View {
                   },
                   secondaryButton: .cancel(Text("取消")))
         }
-        .alert(isPresented: $showAlertForConflict) {
-            Alert(title: Text("衝突警告"),
-                  message: Text("選擇的課程與 \(conflictCourse?.name ?? "") 有時間衝突。"),
-                  dismissButton: .default(Text("確定")))
-        }
     }
     
     private func deleteVolunteer(at index: Int) {

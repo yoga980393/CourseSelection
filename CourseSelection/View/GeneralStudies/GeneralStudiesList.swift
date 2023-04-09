@@ -31,7 +31,7 @@ struct GeneralStudiesList: View {
 
                     List {
                         ForEach(courseList.filter { filter.isMatch($0) }, id: \.id) { course in
-                            TextImageRow(course: course, isSelected: false, isFavorite: false)
+                            GeneralStudiesImageRow(course: course)
                                 .onTapGesture {
                                     let selectedIndex = courseList.firstIndex(where: { $0.id == course.id }) ?? -1
                                     if !chosenVolunteers.contains(selectedIndex) {

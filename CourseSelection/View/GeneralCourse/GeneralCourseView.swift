@@ -26,7 +26,9 @@ struct GeneralCourseView: View {
                 ZStack(alignment: .top) {
                     List {
                         ForEach(courseList.filter {
-                            (searchText.isEmpty || $0.name.localizedStandardContains(searchText)) &&
+                            (searchText.isEmpty ||
+                            $0.name.localizedStandardContains(searchText) ||
+                            $0.teacher.localizedStandardContains(searchText)) &&
                             filter.isMatch($0, selectedCourses: selectedCourses, favoriteCourses: favoriteCourses)
                         }) { course in
                             courseRow(course: course)

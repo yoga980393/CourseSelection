@@ -8,64 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var generalCourses: [Course] = []
-    @State var generalStudiesCourses: [Course] = []
-    @State var selectedCourses: [Course] = []
-    @State var favoriteCourses: [Course] = []
+    @State private var isLoggedIn = false
+    @State var user:Account = Account(account: "", password: "", name: "")
+    @StateObject var themeSettings = ThemeSettings()
 
     var body: some View {
-        TabView {
-            GeneralCourseView(courseList: $generalCourses, selectedCourses: $selectedCourses, favoriteCourses: $favoriteCourses)
-                .tabItem {
-                    Label("普通課程", systemImage: "tag")
-                }
-                
-            GeneralStudiesView(courseList: $generalStudiesCourses, selectedCourses: $selectedCourses)
-                .tabItem {
-                    Label("通識課程", systemImage: "person.circle")
-                }
-            
-            FavoritesView(selectedCourses: $selectedCourses, favoriteCourses: $favoriteCourses)
-                .tabItem {
-                    Label("收藏夾", systemImage: "folder")
-                }
+        ZStack {
+            HomePageView(user: $user, isLoggedIn: $isLoggedIn)
+                .environmentObject(themeSettings)
+                .opacity(isLoggedIn ? 1 : 0)
+                .zIndex(isLoggedIn ? 1 : 0)
+
+            LoginView(isLoggedIn: $isLoggedIn, user: $user)
+                .opacity(isLoggedIn ? 0 : 1)
+                .zIndex(isLoggedIn ? 0 : 1)
         }
-        .onAppear {
-            fetchData()
-        }
-    }
-
-    func fetchData() {
-        guard let url = Bundle.main.url(forResource: "course", withExtension: "json") else {
-            return
-        }
-
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let data = data else {
-                return
-            }
-
-            do {
-                let decodedData = try JSONDecoder().decode([Course].self, from: data)
-
-                DispatchQueue.main.async {
-                    for course in decodedData {
-                        if course.department == "通識" {
-                            self.generalStudiesCourses.append(course)
-                        } else {
-                            self.generalCourses.append(course)
-                        }
-                    }
-                }
-            } catch {
-                print("Error decoding JSON: \(error)")
-            }
-        }.resume()
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(ThemeSettings())
     }
 }
